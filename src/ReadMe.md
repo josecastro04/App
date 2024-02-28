@@ -1,4 +1,4 @@
-## App to transfer files between devices.
+**## App to transfer files between devices.
 
 This is my first project in Java.
 I'm using JavaFX for the GUI and Java's built-in networking library for the file transfer.
@@ -20,4 +20,6 @@ The app is still in development, I'm working on adding more features and improvi
 5. Click the "Download File" button to download the file
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)**
+
+   
