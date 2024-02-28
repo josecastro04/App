@@ -6,7 +6,7 @@ I'm using JavaFX for the GUI and Java's built-in networking library for the file
 The app is still in development, I'm working on adding more features and improving the UI.
 
 ## Features
-- Send files to another device
+- Select multiple files from the directory at once
 - Receive files from another device
 - Delete files from the app
 - Load Files from the app
