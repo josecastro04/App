@@ -122,17 +122,16 @@ public class GUI {
         }
 
         if(text[0].isEmpty() || text[1].isEmpty()){
-            configErrorFrame(new GUI("Error", 250, 100), "Error when trying to login. 1");
+            configErrorFrame(new GUI("Error", 250, 100), "Error when trying to login.");
             database.closeConnection();
             return  false;
         }
 
         String[] userInfo =  database.searchInfoByEmail(text[0]);
-
         if(userInfo.length > 0 && userInfo[3].equals(user.hashPassword(text[1]))){
             user.setUserInfo(userInfo);
         }else{
-            configErrorFrame(new GUI("Error", 250, 100), "Error when trying to login. 2");
+            configErrorFrame(new GUI("Error", 250, 100), "Error when trying to login.");
             database.closeConnection();
             return false;
         }
@@ -217,9 +216,9 @@ public class GUI {
         this.jFrame.add(listModelPanel);
 
         this.jPanel = new JPanel();
-        this.jPanel.setLayout(new GridLayout(4, 1));
+        this.jPanel.setLayout(new GridLayout(5, 1));
 
-        createButtons(new String[] {"Upload File","Download File","Remove File", "Load Files"}, new ActionListener[]{
+        createButtons(new String[] {"Upload File","Download File","Remove File", "Load Files", "See content"}, new ActionListener[]{
                 //This event is used to upload the file
                 e -> {
                     String[] files = readFileNames();
@@ -282,7 +281,21 @@ public class GUI {
                     dataBase1.closeConnection();
                 },
                 //This event is used to load the files
-                e -> listFilesByUserID(listModel, user.getUserId())
+                e -> listFilesByUserID(listModel, user.getUserId()),
+                //This event is used to see the content of the file
+                e -> {
+                    int index = fileList.getSelectedIndex();
+
+                    if (index == -1){
+                        configErrorFrame(new GUI("Error", 250, 100), "Select a file to see the content.");
+                        return;
+                    }
+
+                    Files file = new Files();
+                    file.setFile_name(listModel.get(index));
+
+                    configSeeContentFrame(new GUI("File Content", 400, 600), file);
+                }
         });
         this.jFrame.add(this.jPanel, BorderLayout.EAST);
     }
@@ -293,10 +306,10 @@ public class GUI {
         List<String> files = dataBase.searchFilesByUserID(id);
         dataBase.closeConnection();
 
+        listModel.clear();
+
         for(String file : files){
-            if (!listModel.contains(file)){
-                listModel.addElement(file);
-            }
+            listModel.addElement(file);
         }
     }
 
@@ -314,5 +327,26 @@ public class GUI {
             return fileNames;
         }
         return new String[]{};
+    }
+
+    private void configSeeContentFrame(GUI seeContentFrame, Files file){
+        seeContentFrame.jFrame.setVisible(true);
+        seeContentFrame.jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        JTextArea textArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBar(scrollPane.createVerticalScrollBar());
+
+        DataBase dataBase = new DataBase();
+        dataBase.searchFileByFileName(file);
+        textArea.setText(new String(file.getContent()));
+        dataBase.closeConnection();
+        textArea.setEditable(false);
+
+        panel.add(scrollPane);
+        seeContentFrame.jFrame.add(panel);
     }
 }
