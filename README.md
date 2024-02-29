@@ -11,6 +11,7 @@ The app is still in development, I'm working on adding more features and improvi
 - Delete files from the app
 - Load Files from the app
 - Save files to the app
+- You can see the content of the file you selected
 
 ## How to use
 1. Start the app and create an account
